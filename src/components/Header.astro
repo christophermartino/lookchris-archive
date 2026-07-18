@@ -1,0 +1,97 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+const { current = '' } = Astro.props;
+---
+<header class="site-header">
+  <a class="wordmark" href="/" aria-label="Christopher Martino home">Christopher<br />Martino</a>
+
+  <nav class="desktop-nav" aria-label="Primary navigation">
+    <a class:list={{ active: current === 'work' }} href="/work/paintings">Work</a>
+    <a class:list={{ active: current === 'about' }} href="/about">About</a>
+    <a class:list={{ active: current === 'statement' }} href="/statement">Statement</a>
+    <a class:list={{ active: current === 'contact' }} href="/contact">Contact</a>
+  </nav>
+
+  <div class="header-tools">
+    <ThemeToggle />
+    <button
+      class="menu-label"
+      type="button"
+      aria-expanded="false"
+      aria-controls="site-menu"
+      data-menu-toggle
+    >
+      <span class="menu-text">Menu</span>
+      <span class="menu-icon" aria-hidden="true">☰</span>
+    </button>
+  </div>
+</header>
+
+<div class="menu-panel" id="site-menu" aria-hidden="true" data-menu-panel>
+  <div class="menu-panel-inner">
+    <div class="menu-panel-heading">
+      <span class="eyebrow">Navigation</span>
+      <button class="menu-close" type="button" aria-label="Close menu" data-menu-close>×</button>
+    </div>
+
+    <nav class="menu-nav" aria-label="Menu navigation">
+      <a class:list={{ active: current === 'work' }} href="/work/paintings">Work</a>
+      <a class:list={{ active: current === 'about' }} href="/about">About</a>
+      <a class:list={{ active: current === 'statement' }} href="/statement">Statement</a>
+      <a class:list={{ active: current === 'contact' }} href="/contact">Contact</a>
+    </nav>
+
+    <div class="menu-meta">
+      <span>Christopher Martino</span>
+      <span>New York</span>
+    </div>
+  </div>
+</div>
+
+<script is:inline>
+  (() => {
+    const initialiseMenu = () => {
+      const toggle = document.querySelector('[data-menu-toggle]');
+      const panel = document.querySelector('[data-menu-panel]');
+      const closeButton = document.querySelector('[data-menu-close]');
+
+      if (!toggle || !panel || toggle.dataset.menuBound === 'true') return;
+      toggle.dataset.menuBound = 'true';
+
+      const setOpen = (open) => {
+        toggle.setAttribute('aria-expanded', String(open));
+        panel.setAttribute('aria-hidden', String(!open));
+        panel.classList.toggle('is-open', open);
+        document.body.classList.toggle('menu-open', open);
+
+        if (open) {
+          panel.querySelector('a')?.focus();
+        } else {
+          toggle.focus();
+        }
+      };
+
+      toggle.addEventListener('click', () => {
+        setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+      });
+
+      closeButton?.addEventListener('click', () => setOpen(false));
+
+      panel.addEventListener('click', (event) => {
+        if (event.target === panel || event.target.closest('a')) setOpen(false);
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
+          setOpen(false);
+        }
+      });
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initialiseMenu, { once: true });
+    } else {
+      initialiseMenu();
+    }
+  })();
+</script>

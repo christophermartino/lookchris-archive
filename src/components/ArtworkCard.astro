@@ -1,0 +1,15 @@
+---
+import type { Artwork } from '../data/artworks';
+import { cloudinaryUrl } from '../lib';
+const { artwork } = Astro.props as { artwork: Artwork };
+const src = cloudinaryUrl(artwork.publicId, { width: 900, height: 1100, crop: 'fill', gravity: 'auto' });
+---
+<article class="artwork-card">
+  <a href={`/work/${artwork.collection}/${artwork.slug}`}>
+    <div class="artwork-image-wrap">
+      <img src={src} alt={artwork.alt} loading="lazy" decoding="async" />
+    </div>
+    <h2>{artwork.title}</h2>
+    <p>{artwork.year}</p>
+  </a>
+</article>

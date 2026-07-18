@@ -1,0 +1,42 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ArtworkCard from '../../../components/ArtworkCard.astro';
+import { collections, getCollection, artworks } from '../../../data/artworks';
+
+export function getStaticPaths() {
+  return collections.map((collection) => ({ params: { collection: collection.slug }, props: { collection } }));
+}
+const { collection } = Astro.props;
+const items = getCollection(collection.slug);
+const years = [...new Set(items.map((item) => item.year))].sort((a, b) => b - a);
+---
+<BaseLayout title={`${collection.label} — Christopher Martino`} current="work">
+  <section class="archive-layout">
+    <aside class="archive-sidebar">
+      <p class="eyebrow">Work</p>
+      <h1>{collection.label}</h1>
+      <div class="filter-block">
+        <a href="/work/paintings">All Works <span>{artworks.length}</span></a>
+        {collections.map((item) => <a class:list={{active: item.slug === collection.slug}} href={`/work/${item.slug}`}>{item.label}<span>{getCollection(item.slug).length}</span></a>)}
+      </div>
+      <div class="filter-block">
+        <p class="filter-heading">By year</p>
+        {years.map((year) => <button type="button" data-year={year}>{year}<span>{items.filter((item) => item.year === year).length}</span></button>)}
+        <button type="button" data-year="all">All years<span>×</span></button>
+      </div>
+    </aside>
+    <div class="artwork-grid" data-grid>
+      {items.length ? items.map((artwork) => <div data-card-year={artwork.year}><ArtworkCard artwork={artwork} /></div>) : <p class="empty-state">This collection is being prepared.</p>}
+    </div>
+  </section>
+  <script is:inline>
+    document.querySelectorAll('[data-year]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const year = button.dataset.year;
+        document.querySelectorAll('[data-card-year]').forEach((card) => {
+          card.hidden = year !== 'all' && card.dataset.cardYear !== year;
+        });
+      });
+    });
+  </script>
+</BaseLayout>

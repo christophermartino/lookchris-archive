@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { artworks } from '../data/artworks';
+import { cloudinaryUrl } from '../lib';
+const featured = artworks.find((item) => item.featured) ?? artworks[0];
+---
+<BaseLayout title="Christopher Martino — Artist" current="work">
+  <section class="home-hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Selected work · 2015–2026</p>
+      <h1>Paintings shaped by atmosphere, architecture, and the uncertain distance between memory and observation.</h1>
+      <a class="text-link" href="/work/paintings">View the archive <span>→</span></a>
+    </div>
+    <a class="hero-image" href={`/work/${featured.collection}/${featured.slug}`}>
+      <img src={cloudinaryUrl(featured.publicId, { width: 1800, height: 1400, crop: 'fit' })} alt={featured.alt} />
+      <span>{featured.title}, {featured.year}</span>
+    </a>
+  </section>
+</BaseLayout>

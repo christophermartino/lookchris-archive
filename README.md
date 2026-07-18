@@ -14,9 +14,7 @@ npm run dev
 
 Edit `.env`:
 
-```env
-PUBLIC_CLOUDINARY_CLOUD_NAME=df2ebjhsp
-PUBLIC_CLOUDINARY_FOLDER=darkfolio
+
 ```
 
 Artwork records live in `src/data/artworks.ts`. Replace the sample `publicId` values with the actual IDs in your Cloudinary folder.

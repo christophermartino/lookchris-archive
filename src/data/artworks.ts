@@ -18,7 +18,7 @@ export const artworks: Artwork[] = [
     year: 2025,
     medium: 'Oil on linen',
     dimensions: '30 × 40 in.',
-    publicId: 'darkfolio/painting/12',
+    publicId: 'painting/12',
     alt: 'Painting of a quiet rooftop pool surrounded by pale city buildings',
     description: 'A quiet afternoon in the city. Light, stillness, and the geometry of water.',
     collection: 'paintings',
